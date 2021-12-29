@@ -1,0 +1,91 @@
+﻿@page "/fetchdata"
+@using Dinner_Aid.Shared
+@inject HttpClient Http
+@inject IJSRuntime js
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Hej sötnos</h1>
+
+<p>Tack för att du finns</p>
+
+<p>
+    Så här mycket älskar jag dig..
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-@loadingbarColour" role="progressbar" style="width: @loadingbar%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    <div class="progress">
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+</div>
+
+</p>
+
+    @if (imageUrl is not null)
+{
+  <img src=@imageUrl width="250" height="300">
+}
+
+<div class="center">
+    <button class="btn-success btn" @onclick="Change"> bar = 50</button>
+
+    <button class="btn-dark btn" @onclick="ChangeColour"> Change colour</button>
+
+    <button class="btn-dark btn" @onclick="GetPicture"> Get Armoured Unicorn </button>
+
+     <button class="btn-dark btn" @onclick="RemovePicture"> Dispose armoured Unicorn </button>
+</div>
+
+
+@code {
+    public string loadingbarColour { get; set; } = "success";
+
+    public double loadingbar { get; set; }
+
+    public string imageUrl { get; set; }
+
+    protected override void OnInitialized()
+    {
+        StartTimer();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+    }
+    public async void Change()
+    {
+        loadingbar = 30;
+        StartTimer();
+    }
+      public async void RemovePicture()
+    {
+        imageUrl = null;
+    }
+    public async void GetPicture()
+    {
+      imageUrl = "https://i.pinimg.com/564x/d4/65/81/d46581197d4dbcd90574b4d20b1c18c6.jpg";
+       
+    }
+
+    public async void ChangeColour()
+    {
+        if (loadingbarColour == "warning")
+        {
+            loadingbarColour = "success";
+        }
+        else
+        {
+            loadingbarColour = "warning";
+        }
+
+    }
+
+    public async void StartTimer()
+    {
+        for (var i = 0; i < 800; i++)
+        {
+            loadingbar = loadingbar + 0.125;
+            StateHasChanged();
+            await Task.Delay(5);
+        }
+    }
+}
